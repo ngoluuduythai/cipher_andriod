@@ -17,7 +17,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="end"
-            android:text="生成密钥位数:"
+            android:text="@string/label_rsa_gen_digit"
             android:textStyle="bold" />
 
         <TextView
@@ -31,24 +31,22 @@
             android:text="@string/bit1024"
             app:drawableEndCompat="@drawable/ic_down" />
 
-<!--        <TextView-->
-<!--            android:id="@+id/format"-->
-<!--            android:layout_width="72dp"-->
-<!--            android:layout_height="48dp"-->
-<!--            android:gravity="center"-->
-<!--            android:text="@string/hex"-->
-<!--            app:drawableEndCompat="@drawable/ic_down" />-->
+        <TextView
+            android:id="@+id/format"
+            android:layout_width="72dp"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:text="@string/hex"
+            app:drawableEndCompat="@drawable/ic_down" />
 
         <Button
             android:id="@+id/generate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:text="生成" />
+            android:text="@string/generate" />
 
     </LinearLayout>
-
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -59,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="私钥(hex):"
+            android:text="@string/label_private"
             android:textStyle="bold" />
 
         <View
@@ -76,7 +74,7 @@
             android:textColor="@color/purple_200"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:text="复制" />
+            android:text="@string/copy" />
 
     </LinearLayout>
 
@@ -105,7 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="公钥(hex):"
+            android:text="@string/label_public"
             android:textStyle="bold" />
 
         <View
@@ -122,7 +120,7 @@
             android:textColor="@color/purple_200"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:text="复制" />
+            android:text="@string/copy" />
 
     </LinearLayout>
 
@@ -141,6 +139,5 @@
             android:textIsSelectable="true" />
 
     </ScrollView>
-
 
 </LinearLayout>
