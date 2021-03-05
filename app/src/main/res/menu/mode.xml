@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/ecb"
+        android:title="@string/ecb" />
+    <item
+        android:id="@+id/cbc"
+        android:title="@string/cbc" />
+    <item
+        android:id="@+id/cfb"
+        android:title="@string/cfb" />
+    <item
+        android:id="@+id/ofb"
+        android:title="@string/ofb" />
+    <item
+        android:id="@+id/ctr"
+        android:title="@string/ctr" />
+</menu>

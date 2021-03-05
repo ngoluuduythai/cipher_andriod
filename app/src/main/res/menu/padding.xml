@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/no"
+        android:title="@string/nopadding" />
+    <item
+        android:id="@+id/zero"
+        android:title="@string/zeropadding" />
+    <item
+        android:id="@+id/pkcs5"
+        android:title="@string/pkcs5padding" />
+</menu>

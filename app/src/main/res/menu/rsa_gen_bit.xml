@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/bit512" android:title="@string/bit512" />
+    <item android:id="@+id/bit1024" android:title="@string/bit1024" />
+    <item android:id="@+id/bit2048" android:title="@string/bit2048" />
+    <item android:id="@+id/bit4096" android:title="@string/bit4096" />
+
+</menu>
