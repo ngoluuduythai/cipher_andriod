@@ -2,6 +2,7 @@ package cn.woolsen.cipher.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -40,6 +41,8 @@ class RSACryptoActivity : AppCompatActivity(), View.OnClickListener {
         binding = ActivityRsaCryptoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         when (val res = intent.getIntExtra("title", 0)) {
             R.string.title_rsa_private -> {
                 title = getString(res)
@@ -61,6 +64,16 @@ class RSACryptoActivity : AppCompatActivity(), View.OnClickListener {
         binding.encrypt.setOnClickListener(this)
         binding.decrypt.setOnClickListener(this)
         binding.clip.setOnClickListener(this)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onClick(v: View?) {

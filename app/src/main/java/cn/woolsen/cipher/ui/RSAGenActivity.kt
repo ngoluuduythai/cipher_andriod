@@ -2,6 +2,7 @@ package cn.woolsen.cipher.ui
 
 import android.os.Bundle
 import android.view.Gravity
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -37,8 +38,10 @@ class RSAGenActivity : AppCompatActivity(), View.OnClickListener {
         binding = ActivityRsaGenBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setTitle(R.string.title_rsa_gen)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         setKeyFormat(Format.PEM)
+
         keyFormatMenu = PopupMenu(this, binding.format, Gravity.BOTTOM).apply {
             inflate(R.menu.format_rsa_key)
             setOnMenuItemClickListener {
@@ -69,6 +72,16 @@ class RSAGenActivity : AppCompatActivity(), View.OnClickListener {
         binding.clipPrivate.setOnClickListener(this)
         binding.clipPublic.setOnClickListener(this)
         binding.format.setOnClickListener(this)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun generate() {

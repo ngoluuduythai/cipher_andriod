@@ -48,6 +48,9 @@ class CryptoActivity : AppCompatActivity(), View.OnClickListener,
         binding = ActivityCryptoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        setKeyFormat(Format.ASCII)
+
         getFormatFromSP()
 
         when (val res = intent.getIntExtra("title", 0)) {
@@ -106,6 +109,16 @@ class CryptoActivity : AppCompatActivity(), View.OnClickListener,
         paddingMenu = PopupMenu(this, binding.padding, Gravity.BOTTOM).apply {
             inflate(R.menu.padding)
             setOnMenuItemClickListener(this@CryptoActivity)
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
