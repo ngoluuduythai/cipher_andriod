@@ -2,6 +2,7 @@ package cn.woolsen.cipher.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -9,11 +10,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import cn.hutool.core.util.HexUtil
-import cn.woolsen.cipher.Format
 import cn.woolsen.cipher.R
 import cn.woolsen.cipher.databinding.ActivityRsaCryptoBinding
+import cn.woolsen.cipher.enums.RSAKeyFormat
 import cn.woolsen.cipher.util.Base64Utils.base64DecodeToBytes
 import cn.woolsen.cipher.util.ClipUtils
+import org.bouncycastle.util.io.pem.PemObject
+import org.bouncycastle.util.io.pem.PemReader
+import java.io.StringReader
 import java.security.Key
 import java.security.KeyFactory
 import java.security.spec.PKCS8EncodedKeySpec
@@ -30,7 +34,7 @@ class RSACryptoActivity : AppCompatActivity(), View.OnClickListener {
     private var algorithm = RSA.PRIVATE
 
     private lateinit var keyFormatMenu: PopupMenu
-    private var keyFormat = Format.HEX
+    private var keyFormat = RSAKeyFormat.Hex
 
     enum class RSA {
         PRIVATE, PUBLIC
@@ -40,9 +44,8 @@ class RSACryptoActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = ActivityRsaCryptoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
+        setKeyFormat(RSAKeyFormat.PEM)
         when (val res = intent.getIntExtra("title", 0)) {
             R.string.title_rsa_private -> {
                 title = getString(res)
@@ -60,6 +63,18 @@ class RSACryptoActivity : AppCompatActivity(), View.OnClickListener {
             }
             else -> throw RuntimeException()
         }
+
+        keyFormatMenu = PopupMenu(this, binding.keyFormat, Gravity.BOTTOM).apply {
+            inflate(R.menu.format_rsa_key)
+            setOnMenuItemClickListener {
+                when (it?.itemId) {
+                    R.id.hex -> setKeyFormat(RSAKeyFormat.Hex)
+                    R.id.pem -> setKeyFormat(RSAKeyFormat.PEM)
+                }
+                true
+            }
+        }
+
         binding.keyFormat.setOnClickListener(this)
         binding.encrypt.setOnClickListener(this)
         binding.decrypt.setOnClickListener(this)
@@ -124,8 +139,13 @@ class RSACryptoActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun getKey(): Key {
         val key = when (keyFormat) {
-            Format.ASCII -> binding.key.text.toString().toByteArray()
-            Format.HEX -> HexUtil.decodeHex(binding.key.text.toString())
+            RSAKeyFormat.Hex -> HexUtil.decodeHex(binding.key.text.toString())
+            RSAKeyFormat.PEM -> {
+                val reader = StringReader(binding.key.text.toString())
+                val pemReader = PemReader(reader)
+                val pemObject = pemReader.readPemObject()
+                pemObject.content
+            }
         }
         binding.key.text.toString().base64DecodeToBytes()
         return when (algorithm) {
@@ -140,6 +160,11 @@ class RSACryptoActivity : AppCompatActivity(), View.OnClickListener {
                 keyFactory.generatePrivate(keySpec)
             }
         }
+    }
+
+    private fun setKeyFormat(format: RSAKeyFormat) {
+        keyFormat = format
+        binding.keyFormat.text = format.name
     }
 
     private fun hideKeyboard() {

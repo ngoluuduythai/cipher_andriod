@@ -39,21 +39,18 @@
             android:id="@+id/key_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="end"
             android:textStyle="bold"
-            tools:text="加密公钥(hex):" />
+            tools:text="@string/public_key" />
 
         <TextView
             android:id="@+id/key_format"
             android:layout_width="72dp"
             android:layout_height="32dp"
-            android:gravity="center"
+            android:gravity="center_vertical|end"
             android:text="@string/ascii"
-            android:visibility="gone"
             app:drawableEndCompat="@drawable/ic_down" />
 
     </LinearLayout>
-
 
     <EditText
         android:id="@+id/key"
@@ -63,6 +60,8 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/shape_rectangle"
         android:gravity="start|top"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine"
         android:maxHeight="200dp"
         android:minHeight="120dp"
         android:padding="4dp" />
@@ -72,6 +71,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:gravity="end"
+        android:labelFor="@id/text"
         android:text="@string/label_input"
         android:textStyle="bold" />
 
@@ -83,6 +83,8 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/shape_rectangle"
         android:gravity="start|top"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine"
         android:minHeight="120dp"
         android:padding="4dp" />
 
@@ -111,13 +113,12 @@
             android:gravity="bottom"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:text="复制"
+            android:text="@string/copy"
             android:textColor="@color/purple_200" />
 
     </LinearLayout>
 
-
-    <EditText
+    <TextView
         android:id="@+id/after_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -126,5 +127,7 @@
         android:background="@drawable/shape_rectangle"
         android:gravity="start|top"
         android:minHeight="120dp"
-        android:padding="4dp" />
+        android:padding="4dp"
+        android:textIsSelectable="true" />
+
 </LinearLayout>

@@ -187,12 +187,12 @@
                 android:gravity="bottom"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
-                android:text="复制"
+                android:text="@string/copy"
                 android:textColor="@color/purple_200" />
 
         </LinearLayout>
 
-        <EditText
+        <TextView
             android:id="@+id/after_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -201,7 +201,8 @@
             android:background="@drawable/shape_rectangle"
             android:gravity="start|top"
             android:minHeight="120dp"
-            android:padding="4dp" />
+            android:padding="4dp"
+            android:textIsSelectable="true" />
     </LinearLayout>
 
 </ScrollView>

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import cn.hutool.core.util.HexUtil
 import cn.woolsen.cipher.R
+import cn.woolsen.cipher.enums.RSAKeyFormat
 import cn.woolsen.cipher.databinding.ActivityRsaGenBinding
 import cn.woolsen.cipher.util.ClipUtils
 import org.bouncycastle.util.io.pem.PemObject
@@ -27,11 +28,7 @@ class RSAGenActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityRsaGenBinding
 
     private lateinit var keyFormatMenu: PopupMenu
-    private var keyFormat = Format.Hex
-
-    private enum class Format {
-        Hex, PEM
-    }
+    private var keyFormat = RSAKeyFormat.Hex
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,14 +37,14 @@ class RSAGenActivity : AppCompatActivity(), View.OnClickListener {
         setTitle(R.string.title_rsa_gen)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        setKeyFormat(Format.PEM)
+        setKeyFormat(RSAKeyFormat.PEM)
 
         keyFormatMenu = PopupMenu(this, binding.format, Gravity.BOTTOM).apply {
             inflate(R.menu.format_rsa_key)
             setOnMenuItemClickListener {
                 when (it?.itemId) {
-                    R.id.hex -> setKeyFormat(Format.Hex)
-                    R.id.pem -> setKeyFormat(Format.PEM)
+                    R.id.hex -> setKeyFormat(RSAKeyFormat.Hex)
+                    R.id.pem -> setKeyFormat(RSAKeyFormat.PEM)
                 }
                 true
             }
@@ -89,8 +86,8 @@ class RSAGenActivity : AppCompatActivity(), View.OnClickListener {
         generator.initialize(bit)
         val keyPair = generator.genKeyPair()
         val privateKey = when (keyFormat) {
-            Format.Hex -> HexUtil.encodeHexStr(keyPair.private.encoded)
-            Format.PEM -> {
+            RSAKeyFormat.Hex -> HexUtil.encodeHexStr(keyPair.private.encoded)
+            RSAKeyFormat.PEM -> {
                 val writer = StringWriter()
                 val pemWriter = PemWriter(writer)
                 pemWriter.writeObject(PemObject("PRIVATE KEY", keyPair.private.encoded))
@@ -101,8 +98,8 @@ class RSAGenActivity : AppCompatActivity(), View.OnClickListener {
         }
         binding.privateKey.text = privateKey
         val publicKey = when (keyFormat) {
-            Format.Hex -> HexUtil.encodeHexStr(keyPair.public.encoded)
-            Format.PEM -> {
+            RSAKeyFormat.Hex -> HexUtil.encodeHexStr(keyPair.public.encoded)
+            RSAKeyFormat.PEM -> {
                 val writer = StringWriter()
                 val pemWriter = PemWriter(writer)
                 pemWriter.writeObject(PemObject("PUBLIC KEY", keyPair.public.encoded))
@@ -114,9 +111,9 @@ class RSAGenActivity : AppCompatActivity(), View.OnClickListener {
         binding.publicKey.text = publicKey
     }
 
-    private fun setKeyFormat(format: Format) {
-        keyFormat = format
-        binding.format.text = format.name
+    private fun setKeyFormat(RSAKeyFormat: RSAKeyFormat) {
+        keyFormat = RSAKeyFormat
+        binding.format.text = RSAKeyFormat.name
     }
 
     override fun onClick(v: View?) {

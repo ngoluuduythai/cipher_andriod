@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.edit
 import cn.hutool.core.util.HexUtil
-import cn.woolsen.cipher.Format
+import cn.woolsen.cipher.enums.KeyIvtFormat
 import cn.woolsen.cipher.R
 import cn.woolsen.cipher.crypto.Mode
 import cn.woolsen.cipher.crypto.symmetric.AES
@@ -36,8 +36,8 @@ class CryptoActivity : AppCompatActivity(), View.OnClickListener,
     private lateinit var binding: ActivityCryptoBinding
 
     private var algorithm = Crypto.DES
-    private var keyFormat = Format.HEX
-    private var ivFormat = Format.HEX
+    private var keyFormat = KeyIvtFormat.Hex
+    private var ivFormat = KeyIvtFormat.Hex
 
     private enum class Crypto {
         AES, DES, DESede
@@ -49,7 +49,7 @@ class CryptoActivity : AppCompatActivity(), View.OnClickListener,
         setContentView(binding.root)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        setKeyFormat(Format.ASCII)
+        setKeyFormat(KeyIvtFormat.ASCII)
 
         getFormatFromSP()
 
@@ -81,10 +81,9 @@ class CryptoActivity : AppCompatActivity(), View.OnClickListener,
             inflate(R.menu.format_key_iv)
             setOnMenuItemClickListener {
                 when (it?.itemId) {
-                    R.id.hex -> setKeyFormat(Format.HEX)
-                    R.id.ascii -> setKeyFormat(Format.ASCII)
+                    R.id.hex -> setKeyFormat(KeyIvtFormat.Hex)
+                    R.id.ascii -> setKeyFormat(KeyIvtFormat.ASCII)
                 }
-                binding.keyFormat.text = keyFormat.str
                 saveFormatToSP()
                 true
             }
@@ -94,8 +93,8 @@ class CryptoActivity : AppCompatActivity(), View.OnClickListener,
             inflate(R.menu.format_key_iv)
             setOnMenuItemClickListener {
                 when (it?.itemId) {
-                    R.id.hex -> setIvFormat(Format.HEX)
-                    R.id.ascii -> setIvFormat(Format.ASCII)
+                    R.id.hex -> setIvFormat(KeyIvtFormat.Hex)
+                    R.id.ascii -> setIvFormat(KeyIvtFormat.ASCII)
                 }
                 saveFormatToSP()
                 true
@@ -203,8 +202,8 @@ class CryptoActivity : AppCompatActivity(), View.OnClickListener,
 
     private fun getKey(): ByteArray {
         return when (keyFormat) {
-            Format.HEX -> HexUtil.decodeHex(binding.key.text.toString())
-            Format.ASCII -> binding.key.text.toString().toByteArray()
+            KeyIvtFormat.Hex -> HexUtil.decodeHex(binding.key.text.toString())
+            KeyIvtFormat.ASCII -> binding.key.text.toString().toByteArray()
         }
     }
 
@@ -214,20 +213,20 @@ class CryptoActivity : AppCompatActivity(), View.OnClickListener,
             null
         } else {
             when (ivFormat) {
-                Format.HEX -> HexUtil.decodeHex(binding.iv.text.toString())
-                Format.ASCII -> binding.iv.text.toString().toByteArray()
+                KeyIvtFormat.Hex -> HexUtil.decodeHex(binding.iv.text.toString())
+                KeyIvtFormat.ASCII -> binding.iv.text.toString().toByteArray()
             }
         }
     }
 
-    private fun setIvFormat(format: Format) {
-        ivFormat = format
-        binding.ivFormat.text = format.str
+    private fun setIvFormat(keyIvtFormat: KeyIvtFormat) {
+        ivFormat = keyIvtFormat
+        binding.ivFormat.text = keyIvtFormat.name
     }
 
-    private fun setKeyFormat(format: Format) {
-        keyFormat = format
-        binding.keyFormat.text = format.str
+    private fun setKeyFormat(keyIvtFormat: KeyIvtFormat) {
+        keyFormat = keyIvtFormat
+        binding.keyFormat.text = keyIvtFormat.name
     }
 
 
@@ -250,15 +249,15 @@ class CryptoActivity : AppCompatActivity(), View.OnClickListener,
         GlobalScope.launch(Dispatchers.IO) {
             val sp = getSharedPreferences("format", Context.MODE_PRIVATE)
             val ivFormat = try {
-                Format.valueOf(sp.getString("${title}_iv_format_name", null) ?: ivFormat.name)
+                KeyIvtFormat.valueOf(sp.getString("${title}_iv_format_name", null) ?: ivFormat.name)
             } catch (e: Exception) {
-                Format.HEX
+                KeyIvtFormat.Hex
             }
             setIvFormat(ivFormat)
             val keyFormat = try {
-                Format.valueOf(sp.getString("${title}_key_format_name", null) ?: keyFormat.name)
+                KeyIvtFormat.valueOf(sp.getString("${title}_key_format_name", null) ?: keyFormat.name)
             } catch (e: Exception) {
-                Format.HEX
+                KeyIvtFormat.Hex
             }
             setKeyFormat(keyFormat)
         }

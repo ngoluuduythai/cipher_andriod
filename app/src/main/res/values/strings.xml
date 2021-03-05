@@ -21,10 +21,10 @@
     <string name="bit2048">2048位</string>
     <string name="bit4096">4096位</string>
 
-    <string name="hex">hex</string>
-    <string name="base64">base64</string>
+    <string name="hex">Hex</string>
+    <string name="base64">Base64</string>
     <string name="ascii">ASCII</string>
-    <string name="utf8">utf-8</string>
+    <string name="utf8">UTF-8</string>
     <string name="pem">PEM</string>
 
     <string name="title_aes">AES加密解密</string>
@@ -34,18 +34,18 @@
     <string name="title_rsa_private">"RSA私钥加密解密"</string>
     <string name="title_rsa_public">"RSA公钥加密解密"</string>
 
-    <string name="private_key">加密私钥</string>
+    <string name="private_key">私钥</string>
     <string name="rsa_private_encrypt">RSA私钥加密</string>
     <string name="rsa_private_decrypt">RSA私钥解密[解密对应公钥的加密]</string>
-    <string name="public_key">加密公钥</string>
+    <string name="public_key">公钥</string>
     <string name="rsa_public_encrypt">RSA公钥加密</string>
     <string name="rsa_public_decrypt">RSA公钥解密[解密对应私钥的加密]</string>
 
     <string name="label_iv">初始化向量iv:</string>
     <string name="label_key">密钥:</string>
     <string name="label_iv_key_format">iv和密钥编码格式:</string>
-    <string name="label_output">加密(hex)、解密(hex)转换结果:</string>
-    <string name="label_input">待加密(hex)、解密(hex)的文本:</string>
+    <string name="label_output">加密、解密转换结果:</string>
+    <string name="label_input">待加密、解密的文本:</string>
     <string name="label_rsa_gen_digit">生成密钥位数:</string>
     <string name="label_private">私钥:</string>
     <string name="label_public">公钥:</string>
