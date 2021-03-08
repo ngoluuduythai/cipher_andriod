@@ -36,8 +36,9 @@
     <string name="title_des">DES加密解密</string>
     <string name="title_des_ede">3DES加密解密</string>
     <string name="title_rsa_gen">RSA密钥对生成</string>
-    <string name="title_rsa_private">"RSA私钥加密解密"</string>
-    <string name="title_rsa_public">"RSA公钥加密解密"</string>
+    <string name="title_rsa_private">RSA私钥加密解密</string>
+    <string name="title_rsa_public">RSA公钥加密解密</string>
+    <string name="title_rsa_check">RSA公私密钥校验</string>
 
     <string name="private_key">私钥</string>
     <string name="rsa_private_encrypt">RSA私钥加密</string>
@@ -57,4 +58,5 @@
 
     <string name="generate">生成</string>
     <string name="copy">复制</string>
+    <string name="check">检查</string>
 </resources>

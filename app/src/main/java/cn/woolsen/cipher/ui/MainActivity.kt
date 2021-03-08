@@ -25,9 +25,11 @@ class MainActivity : AppCompatActivity() {
             R.string.title_des_ede to CryptoActivity::class.java,
             R.string.title_rsa_gen to RSAGenActivity::class.java,
             R.string.title_rsa_private to RSACryptoActivity::class.java,
-            R.string.title_rsa_public to RSACryptoActivity::class.java
+            R.string.title_rsa_public to RSACryptoActivity::class.java,
+            R.string.title_rsa_check to RSACheckActivity::class.java
         ).entries.toList()
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, list.map { getString(it.key) })
+        val adapter = ArrayAdapter(
+            this, android.R.layout.simple_list_item_1, list.map { getString(it.key) })
         binding.list.adapter = adapter
         binding.list.setOnItemClickListener { _, _, position, _ ->
             val intent = Intent(this, list[position].value).apply {
