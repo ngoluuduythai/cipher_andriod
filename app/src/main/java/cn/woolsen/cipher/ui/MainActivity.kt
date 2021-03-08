@@ -1,11 +1,11 @@
-package cn.woolsen.cipher
+package cn.woolsen.cipher.ui
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import cn.woolsen.cipher.R
 import cn.woolsen.cipher.databinding.ActivityMainBinding
-import cn.woolsen.cipher.ui.*
 
 /**
  * @author woolsen

@@ -6,16 +6,18 @@ import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
-import cn.hutool.core.util.HexUtil
 import cn.woolsen.cipher.R
 import cn.woolsen.cipher.databinding.ActivityRsaCryptoBinding
+import cn.woolsen.cipher.enums.Charset
 import cn.woolsen.cipher.enums.RSAKeyFormat
 import cn.woolsen.cipher.util.Base64Utils.base64DecodeToBytes
+import cn.woolsen.cipher.util.Base64Utils.base64EncodeToString
 import cn.woolsen.cipher.util.ClipUtils
-import org.bouncycastle.util.io.pem.PemObject
+import cn.woolsen.cipher.util.HexUtils
+import cn.woolsen.cipher.util.SnackUtils.showSnackbar
+import com.google.android.material.snackbar.Snackbar
 import org.bouncycastle.util.io.pem.PemReader
 import java.io.StringReader
 import java.security.Key
@@ -36,6 +38,11 @@ class RSACryptoActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var keyFormatMenu: PopupMenu
     private var keyFormat = RSAKeyFormat.Hex
 
+    private lateinit var charsetMenu: PopupMenu
+    private lateinit var encryptedFormatMenu: PopupMenu
+    private var charset = Charset.UTF_8
+    private var encryptedFormat = Charset.BASE64
+
     enum class RSA {
         PRIVATE, PUBLIC
     }
@@ -45,7 +52,14 @@ class RSACryptoActivity : AppCompatActivity(), View.OnClickListener {
         binding = ActivityRsaCryptoBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         setKeyFormat(RSAKeyFormat.PEM)
+
+        charset = Charset.UTF_8
+        binding.charset.setText(R.string.utf8)
+        encryptedFormat = Charset.BASE64
+        binding.encryptedFormat.setText(R.string.base64)
+
         when (val res = intent.getIntExtra("title", 0)) {
             R.string.title_rsa_private -> {
                 title = getString(res)
@@ -74,11 +88,50 @@ class RSACryptoActivity : AppCompatActivity(), View.OnClickListener {
                 true
             }
         }
+        charsetMenu = PopupMenu(this, binding.charset, Gravity.BOTTOM).apply {
+            inflate(R.menu.charset)
+            setOnMenuItemClickListener {
+                charset = when (it.itemId) {
+                    R.id.hex -> Charset.HEX
+                    R.id.gb2312 -> Charset.GB2312
+                    R.id.utf8 -> Charset.UTF_8
+                    R.id.utf16 -> Charset.UTF_16
+                    R.id.utf16be -> Charset.UTF_16BE
+                    R.id.utf16le -> Charset.UTF_16LE
+                    else -> {
+                        showSnackbar("不支持此编码格式", Snackbar.LENGTH_SHORT)
+                        return@setOnMenuItemClickListener true
+                    }
+                }
+                binding.charset.text = it.title
+                true
+            }
+        }
+        encryptedFormatMenu = PopupMenu(this, binding.encryptedFormat, Gravity.BOTTOM).apply {
+            inflate(R.menu.format_encrypted)
+            setOnMenuItemClickListener {
+                encryptedFormat = when (it.itemId) {
+                    R.id.hex -> Charset.HEX
+                    R.id.base64 -> Charset.BASE64
+                    else -> {
+                        showSnackbar("不支持此编码格式", Snackbar.LENGTH_SHORT)
+                        return@setOnMenuItemClickListener true
+                    }
+                }
+                binding.encryptedFormat.text = it.title
+                true
+            }
+        }
+
 
         binding.keyFormat.setOnClickListener(this)
         binding.encrypt.setOnClickListener(this)
         binding.decrypt.setOnClickListener(this)
         binding.clip.setOnClickListener(this)
+        binding.charset.setOnClickListener(this)
+        binding.encryptedFormat.setOnClickListener(this)
+
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -96,9 +149,11 @@ class RSACryptoActivity : AppCompatActivity(), View.OnClickListener {
             R.id.encrypt -> encrypt()
             R.id.decrypt -> decrypt()
             R.id.key_format -> keyFormatMenu.show()
+            R.id.charset -> charsetMenu.show()
+            R.id.encrypted_format -> encryptedFormatMenu.show()
             R.id.clip -> {
                 ClipUtils.clip(this, binding.afterText.text.toString())
-                Toast.makeText(this, "已复制到剪切版", Toast.LENGTH_SHORT).show()
+                showSnackbar("已复制到剪切版", Snackbar.LENGTH_SHORT)
             }
             else -> return
         }
@@ -107,39 +162,61 @@ class RSACryptoActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun encrypt() {
         try {
-            val text = HexUtil.decodeHex(binding.text.text.toString())
+            val text = if (charset == Charset.HEX) {
+                HexUtils.decode(binding.text.text.toString())
+            } else {
+                binding.text.text.toString().toByteArray(charset(charset))
+            }
             val keyPublic = getKey()
-            val cipher = Cipher.getInstance("RSA")
+            val cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding")
             cipher.init(Cipher.ENCRYPT_MODE, keyPublic)
             val encrypted = cipher.doFinal(text)
-            val afterText = HexUtil.encodeHexStr(encrypted)
-            binding.afterText.setText(afterText)
-            Toast.makeText(this, "加密成功", Toast.LENGTH_SHORT).show()
+            val afterText = when (encryptedFormat) {
+                Charset.BASE64 -> encrypted.base64EncodeToString()
+                Charset.HEX -> HexUtils.encode(encrypted)
+                else -> {
+                    showSnackbar("不支持此编码", Snackbar.LENGTH_SHORT)
+                    return
+                }
+            }
+            binding.afterText.text = afterText
+            showSnackbar("加密成功", Snackbar.LENGTH_SHORT)
         } catch (e: Exception) {
             e.printStackTrace()
-            Toast.makeText(this, e.message ?: "加密出错", Toast.LENGTH_SHORT).show()
+            showSnackbar(e.message ?: "加密出错", Snackbar.LENGTH_SHORT)
         }
     }
 
     private fun decrypt() {
         try {
-            val text = HexUtil.decodeHex(binding.text.text.toString())
+            val text = when (encryptedFormat) {
+                Charset.BASE64 -> binding.text.text.toString().base64DecodeToBytes()
+                Charset.HEX -> HexUtils.decode(binding.text.text.toString())
+                else -> {
+                    showSnackbar("不支持此编码", Snackbar.LENGTH_SHORT)
+                    return
+                }
+            }
             val keyPublic = getKey()
-            val cipher = Cipher.getInstance("RSA")
+            val cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding")
             cipher.init(Cipher.DECRYPT_MODE, keyPublic)
-            val decrypted = cipher.doFinal(text)
-            val afterText = HexUtil.encodeHexStr(decrypted)
-            binding.afterText.setText(afterText)
-            Toast.makeText(this, "解密成功", Toast.LENGTH_SHORT).show()
+            val decryptedBytes = cipher.doFinal(text)
+            val afterText = if (charset == Charset.HEX) {
+                HexUtils.encode(decryptedBytes)
+            } else {
+                String(decryptedBytes, charset(charset))
+            }
+            binding.afterText.text = afterText
+            showSnackbar("解密成功", Snackbar.LENGTH_SHORT)
         } catch (e: Exception) {
             e.printStackTrace()
-            Toast.makeText(this, e.message ?: "解密出错", Toast.LENGTH_SHORT).show()
+            showSnackbar(e.message ?: "解密出错", Snackbar.LENGTH_SHORT)
         }
     }
 
     private fun getKey(): Key {
         val key = when (keyFormat) {
-            RSAKeyFormat.Hex -> HexUtil.decodeHex(binding.key.text.toString())
+            RSAKeyFormat.Hex -> HexUtils.decode(binding.key.text.toString())
             RSAKeyFormat.PEM -> {
                 val reader = StringReader(binding.key.text.toString())
                 val pemReader = PemReader(reader)
@@ -147,7 +224,6 @@ class RSACryptoActivity : AppCompatActivity(), View.OnClickListener {
                 pemObject.content
             }
         }
-        binding.key.text.toString().base64DecodeToBytes()
         return when (algorithm) {
             RSA.PUBLIC -> {
                 val keySpec = X509EncodedKeySpec(key)

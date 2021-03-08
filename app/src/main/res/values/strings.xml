@@ -24,8 +24,13 @@
     <string name="hex">Hex</string>
     <string name="base64">Base64</string>
     <string name="ascii">ASCII</string>
-    <string name="utf8">UTF-8</string>
     <string name="pem">PEM</string>
+
+    <string name="gb2312">GBK/GB2312</string>
+    <string name="utf8">UTF-8</string>
+    <string name="utf16">UTF-16</string>
+    <string name="utf16be">UTF-16BE</string>
+    <string name="utf16le">UTF-16LE</string>
 
     <string name="title_aes">AES加密解密</string>
     <string name="title_des">DES加密解密</string>

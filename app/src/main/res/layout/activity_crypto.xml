@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
@@ -20,7 +21,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="120dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:gravity="end"
                 android:text="模式:"
@@ -53,7 +54,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="120dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:gravity="end"
                 android:text="填充:"
@@ -85,7 +86,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="120dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:gravity="end"
                 android:text="@string/label_iv"
@@ -118,7 +119,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="120dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:gravity="end"
                 android:text="@string/label_key"
@@ -139,6 +140,47 @@
                 android:gravity="center"
                 android:text="@string/hex"
                 app:drawableEndCompat="@drawable/ic_down" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="密文类型:"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/encrypted_format"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/base64"
+                app:drawableEndCompat="@drawable/ic_down" />
+
+            <TextView
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="字符集:"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/charset"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:gravity="center"
+                app:drawableEndCompat="@drawable/ic_down"
+                tools:text="@string/gb2312" />
 
         </LinearLayout>
 

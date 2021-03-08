@@ -30,9 +30,53 @@
 
     </LinearLayout>
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="密文类型:"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/encrypted_format"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/base64"
+            app:drawableEndCompat="@drawable/ic_down" />
+
+        <TextView
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="字符集:"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/charset"
+            android:layout_width="140dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            app:drawableEndCompat="@drawable/ic_down"
+            tools:text="@string/gb2312" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <TextView
@@ -47,7 +91,7 @@
             android:layout_width="72dp"
             android:layout_height="32dp"
             android:gravity="center_vertical|end"
-            android:text="@string/ascii"
+            android:text="@string/pem"
             app:drawableEndCompat="@drawable/ic_down" />
 
     </LinearLayout>
@@ -69,11 +113,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:gravity="end"
         android:labelFor="@id/text"
+        android:layout_marginTop="8dp"
         android:text="@string/label_input"
         android:textStyle="bold" />
+
 
     <EditText
         android:id="@+id/text"
@@ -91,12 +136,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:text="@string/label_output"
             android:textStyle="bold" />
 
@@ -109,8 +155,7 @@
             android:id="@+id/clip"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="bottom"
-            android:gravity="bottom"
+            android:gravity="center"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:text="@string/copy"

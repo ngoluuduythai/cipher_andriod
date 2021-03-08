@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/gb2312" android:title="@string/gb2312" />
+    <item android:id="@+id/utf8" android:title="@string/utf8" />
+    <item android:id="@+id/utf16" android:title="@string/utf16" />
+    <item android:id="@+id/utf16be" android:title="@string/utf16be" />
+    <item android:id="@+id/utf16le" android:title="@string/utf16le" />
+    <item android:id="@+id/hex" android:title="@string/hex" />
+</menu>
