@@ -7,11 +7,11 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
-import cn.hutool.core.util.HexUtil
 import cn.woolsen.cipher.R
 import cn.woolsen.cipher.enums.RSAKeyFormat
 import cn.woolsen.cipher.databinding.ActivityRsaGenBinding
 import cn.woolsen.cipher.util.ClipUtils
+import cn.woolsen.cipher.util.HexUtils
 import org.bouncycastle.util.io.pem.PemObject
 import org.bouncycastle.util.io.pem.PemWriter
 import java.io.StringWriter
@@ -86,7 +86,7 @@ class RSAGenActivity : AppCompatActivity(), View.OnClickListener {
         generator.initialize(bit)
         val keyPair = generator.genKeyPair()
         val privateKey = when (keyFormat) {
-            RSAKeyFormat.Hex -> HexUtil.encodeHexStr(keyPair.private.encoded)
+            RSAKeyFormat.Hex -> HexUtils.encode(keyPair.private.encoded)
             RSAKeyFormat.PEM -> {
                 val writer = StringWriter()
                 val pemWriter = PemWriter(writer)
@@ -98,7 +98,7 @@ class RSAGenActivity : AppCompatActivity(), View.OnClickListener {
         }
         binding.privateKey.text = privateKey
         val publicKey = when (keyFormat) {
-            RSAKeyFormat.Hex -> HexUtil.encodeHexStr(keyPair.public.encoded)
+            RSAKeyFormat.Hex -> HexUtils.encode(keyPair.public.encoded)
             RSAKeyFormat.PEM -> {
                 val writer = StringWriter()
                 val pemWriter = PemWriter(writer)

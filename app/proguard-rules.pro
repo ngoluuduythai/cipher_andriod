@@ -20,5 +20,4 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class cn.hutool.crypto.** {*;}
 -keep class org.bouncycastle.** {*;}

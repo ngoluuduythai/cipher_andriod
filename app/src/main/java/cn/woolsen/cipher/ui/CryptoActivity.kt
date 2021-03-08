@@ -10,24 +10,21 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import cn.woolsen.cipher.R
-import cn.woolsen.cipher.crypto.Mode
-import cn.woolsen.cipher.crypto.symmetric.AES
-import cn.woolsen.cipher.crypto.symmetric.DES
-import cn.woolsen.cipher.crypto.symmetric.DESede
 import cn.woolsen.cipher.databinding.ActivityCryptoBinding
 import cn.woolsen.cipher.enums.Charset
-import cn.woolsen.cipher.enums.KeyIvtFormat
+import cn.woolsen.cipher.enums.KeyIvFormat
 import cn.woolsen.cipher.util.Base64Utils.base64DecodeToBytes
 import cn.woolsen.cipher.util.Base64Utils.base64EncodeToString
 import cn.woolsen.cipher.util.ClipUtils
 import cn.woolsen.cipher.util.HexUtils
 import cn.woolsen.cipher.util.SnackUtils.showSnackbar
 import com.google.android.material.snackbar.Snackbar
-import java.security.spec.KeySpec
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
+import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.DESKeySpec
 import javax.crypto.spec.DESedeKeySpec
+import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
 /**
@@ -46,8 +43,8 @@ class CryptoActivity : AppCompatActivity(), View.OnClickListener,
     private lateinit var binding: ActivityCryptoBinding
 
     private var algorithm = Crypto.DES
-    private var keyFormat = KeyIvtFormat.Hex
-    private var ivFormat = KeyIvtFormat.Hex
+    private var keyFormat = KeyIvFormat.Hex
+    private var ivFormat = KeyIvFormat.Hex
 
     private var charset = Charset.UTF_8
     private var encryptedFormat = Charset.BASE64
@@ -64,7 +61,8 @@ class CryptoActivity : AppCompatActivity(), View.OnClickListener,
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // 初始化选项
-        setKeyFormat(KeyIvtFormat.ASCII)
+        setKeyFormat(KeyIvFormat.ASCII)
+        setIvFormat(KeyIvFormat.ASCII)
         binding.iv.isEnabled = false
 
         charset = Charset.UTF_8
@@ -137,8 +135,8 @@ class CryptoActivity : AppCompatActivity(), View.OnClickListener,
             inflate(R.menu.format_key_iv)
             setOnMenuItemClickListener {
                 when (it?.itemId) {
-                    R.id.hex -> setKeyFormat(KeyIvtFormat.Hex)
-                    R.id.ascii -> setKeyFormat(KeyIvtFormat.ASCII)
+                    R.id.hex -> setKeyFormat(KeyIvFormat.Hex)
+                    R.id.ascii -> setKeyFormat(KeyIvFormat.ASCII)
                 }
                 true
             }
@@ -147,8 +145,8 @@ class CryptoActivity : AppCompatActivity(), View.OnClickListener,
             inflate(R.menu.format_key_iv)
             setOnMenuItemClickListener {
                 when (it.itemId) {
-                    R.id.hex -> setIvFormat(KeyIvtFormat.Hex)
-                    R.id.ascii -> setIvFormat(KeyIvtFormat.ASCII)
+                    R.id.hex -> setIvFormat(KeyIvFormat.Hex)
+                    R.id.ascii -> setIvFormat(KeyIvFormat.ASCII)
                 }
                 true
             }
@@ -213,25 +211,18 @@ class CryptoActivity : AppCompatActivity(), View.OnClickListener,
     }
 
     private fun encrypt() {
-        val mode = binding.mode.text.toString()
-        val padding = binding.padding.text.toString()
         try {
             val text = if (charset == Charset.HEX) {
                 HexUtils.decode(binding.text.text.toString())
             } else {
                 binding.text.text.toString().toByteArray(charset(charset))
             }
-            val key = getKey()
-            val iv = getIv()
-            val crypto = when (algorithm) {
-                Crypto.AES -> AES(mode, padding, key, iv)
-                Crypto.DES -> DES(mode, padding, key, iv)
-                Crypto.DESede -> DESede(mode, padding, key, iv)
-            }
-            val encrypted = crypto.encrypt(text)
+
+            val encryptedBytes = doFinal(Cipher.ENCRYPT_MODE, text)
+
             val afterText = when (encryptedFormat) {
-                Charset.BASE64 -> encrypted.base64EncodeToString()
-                Charset.HEX -> HexUtils.encode(encrypted)
+                Charset.BASE64 -> encryptedBytes.base64EncodeToString()
+                Charset.HEX -> HexUtils.encode(encryptedBytes)
                 else -> {
                     showSnackbar("不支持此编码", Snackbar.LENGTH_SHORT)
                     return
@@ -246,8 +237,6 @@ class CryptoActivity : AppCompatActivity(), View.OnClickListener,
     }
 
     private fun decrypt() {
-        val mode = binding.mode.text.toString()
-        val padding = binding.padding.text.toString()
         try {
             val text = when (encryptedFormat) {
                 Charset.BASE64 -> binding.text.text.toString().base64DecodeToBytes()
@@ -257,14 +246,9 @@ class CryptoActivity : AppCompatActivity(), View.OnClickListener,
                     return
                 }
             }
-            val key = getKey()
-            val iv = getIv()
-            val crypto = when (algorithm) {
-                Crypto.AES -> AES(mode, padding, key, iv)
-                Crypto.DES -> DES(mode, padding, key, iv)
-                Crypto.DESede -> DESede(mode, padding, key, iv)
-            }
-            val decryptedBytes = crypto.decrypt(text)
+
+            val decryptedBytes = doFinal(Cipher.DECRYPT_MODE, text)
+
             val afterText = if (charset == Charset.HEX) {
                 HexUtils.encode(decryptedBytes)
             } else {
@@ -278,34 +262,83 @@ class CryptoActivity : AppCompatActivity(), View.OnClickListener,
         }
     }
 
-    private fun getKey(): ByteArray {
-        return when (keyFormat) {
-            KeyIvtFormat.Hex -> HexUtils.decode(binding.key.text.toString())
-            KeyIvtFormat.ASCII -> binding.key.text.toString().toByteArray()
+    private fun doFinal(opmode: Int, text: ByteArray): ByteArray {
+        val mode = binding.mode.text.toString()
+        var padding = binding.padding.text.toString()
+        val isZeroPadding = padding == "ZeroPadding"
+        if (isZeroPadding) {
+            padding = "NoPadding"
+        }
+        val iv = getIv()
+        val alg = when (algorithm) {
+            Crypto.AES -> "AES"
+            Crypto.DES -> "DES"
+            Crypto.DESede -> "DESede"
+        }
+        val secretKey = getSecretKey()
+        val cipher = Cipher.getInstance("${alg}/${mode}/${padding}")
+        if (iv == null) {
+            cipher.init(opmode, secretKey)
+        } else {
+            cipher.init(opmode, secretKey, IvParameterSpec(iv))
+        }
+
+        var data = text
+        if (isZeroPadding) {
+            val blockSize = cipher.blockSize
+            val length: Int = text.size
+            // 按照块拆分后的数据中多余的数据
+            val remainLength: Int = length % blockSize
+            if (remainLength > 0) {
+                // 新长度为blockSize的整数倍，多余部分填充0
+                data = text.copyOf(length + blockSize - remainLength)
+            }
+        }
+
+        return cipher.doFinal(data)
+    }
+
+    private fun getSecretKey(): SecretKey {
+        val keyBytes = when (keyFormat) {
+            KeyIvFormat.Hex -> HexUtils.decode(binding.key.text.toString())
+            KeyIvFormat.ASCII -> binding.key.text.toString().toByteArray()
+        }
+        return when (algorithm) {
+            Crypto.AES -> {
+                SecretKeySpec(keyBytes, "RSA")
+            }
+            Crypto.DES -> {
+                val keyFactory = SecretKeyFactory.getInstance("DES")
+                keyFactory.generateSecret(DESKeySpec(keyBytes))
+            }
+            Crypto.DESede -> {
+                val keyFactory = SecretKeyFactory.getInstance("DESede")
+                keyFactory.generateSecret(DESedeKeySpec(keyBytes))
+            }
         }
     }
 
     private fun getIv(): ByteArray? {
         val mode = binding.mode.text.toString()
         val iv = binding.iv.text.toString()
-        return if (mode == Mode.ECB.name || iv.isEmpty()) {
+        return if (mode == "ECB" || iv.isEmpty()) {
             null
         } else {
             when (ivFormat) {
-                KeyIvtFormat.Hex -> HexUtils.decode(binding.iv.text.toString())
-                KeyIvtFormat.ASCII -> binding.iv.text.toString().toByteArray()
+                KeyIvFormat.Hex -> HexUtils.decode(binding.iv.text.toString())
+                KeyIvFormat.ASCII -> binding.iv.text.toString().toByteArray()
             }
         }
     }
 
-    private fun setIvFormat(keyIvtFormat: KeyIvtFormat) {
-        ivFormat = keyIvtFormat
-        binding.ivFormat.text = keyIvtFormat.name
+    private fun setIvFormat(keyIvFormat: KeyIvFormat) {
+        ivFormat = keyIvFormat
+        binding.ivFormat.text = keyIvFormat.name
     }
 
-    private fun setKeyFormat(keyIvtFormat: KeyIvtFormat) {
-        keyFormat = keyIvtFormat
-        binding.keyFormat.text = keyIvtFormat.name
+    private fun setKeyFormat(keyIvFormat: KeyIvFormat) {
+        keyFormat = keyIvFormat
+        binding.keyFormat.text = keyIvFormat.name
     }
 
     private fun hideKeyboard() {

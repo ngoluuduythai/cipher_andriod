@@ -1,8 +1,7 @@
 package cn.woolsen.cipher
 
 import android.util.Base64
-import cn.hutool.crypto.asymmetric.KeyType
-import cn.hutool.crypto.asymmetric.RSA
+import cn.woolsen.cipher.util.HexUtils
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.junit.Assert
 import org.junit.Test
@@ -24,6 +23,64 @@ class RSATest {
             sb.append(range.random())
         }
         sb.toString()
+    }
+
+    @Test
+    fun publicParseTest() {
+        val keyFactory = KeyFactory.getInstance("RSA")
+
+        val bc = BouncyCastleProvider()
+        val keyGenerator = KeyPairGenerator.getInstance("RSA", bc)
+        keyGenerator.initialize(2048)
+        val keyPair = keyGenerator.genKeyPair()
+
+        run {
+            val writer = StringWriter()
+            val pemWriter = PemWriter(writer)
+            pemWriter.writeObject(PemObject("PRIVATE KEY", keyPair.private.encoded))
+            pemWriter.flush()
+            pemWriter.close()
+            println("私钥:\n$writer")
+        }
+        val privateKey = keyFactory.getKeySpec(keyPair.private, RSAPrivateKeySpec::class.java)
+        println("私钥信息：key长度：${privateKey.modulus.bitLength()}")
+        println("模数：${HexUtils.encode(privateKey.modulus.toByteArray())}")
+        println("bitCount：${privateKey.modulus.signum()}")
+        println()
+
+        val originPublicKeyPem: String
+        run {
+            val writer = StringWriter()
+            val pemWriter = PemWriter(writer)
+            pemWriter.writeObject(PemObject("PUBLIC KEY", keyPair.public.encoded))
+            pemWriter.flush()
+            pemWriter.close()
+            originPublicKeyPem = writer.toString()
+            println("公钥:\n$originPublicKeyPem")
+        }
+
+
+
+        val privateKeyBytes = keyPair.private
+        val private = keyFactory.getKeySpec(privateKeyBytes, RSAPrivateKeySpec::class.java)
+        val keySpec = RSAPublicKeySpec(private.modulus, BigInteger.valueOf(65537))
+        val publicKey = keyFactory.generatePublic(keySpec)
+
+        val parsedPublicKeyPem: String
+        run {
+            val writer = StringWriter()
+            val pemWriter = PemWriter(writer)
+            pemWriter.writeObject(PemObject("PUBLIC KEY", publicKey.encoded))
+            pemWriter.flush()
+            pemWriter.close()
+            parsedPublicKeyPem = writer.toString()
+            println("私钥中提取的公钥:\n$parsedPublicKeyPem")
+        }
+
+
+
+        Assert.assertEquals(originPublicKeyPem, parsedPublicKeyPem)
+
     }
 
     @Test
