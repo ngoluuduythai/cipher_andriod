@@ -172,6 +172,7 @@
         android:background="@drawable/shape_rectangle"
         android:gravity="start|top"
         android:minHeight="120dp"
+        android:maxHeight="120dp"
         android:padding="4dp"
         android:textIsSelectable="true" />
 

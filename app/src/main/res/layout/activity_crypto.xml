@@ -240,11 +240,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/shape_rectangle"
             android:gravity="start|top"
             android:minHeight="120dp"
             android:padding="4dp"
             android:textIsSelectable="true" />
+
     </LinearLayout>
 
 </ScrollView>
