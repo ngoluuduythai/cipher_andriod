@@ -6,9 +6,12 @@ import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.view.isVisible
+import androidx.core.widget.PopupWindowCompat
 import cn.woolsen.cipher.R
 import cn.woolsen.cipher.databinding.ActivityCryptoBinding
 import cn.woolsen.cipher.enums.Charset
@@ -40,6 +43,9 @@ class CryptoActivity : AppCompatActivity(), View.OnClickListener,
     private lateinit var charsetMenu: PopupMenu
     private lateinit var encryptedFormatMenu: PopupMenu
 
+    private lateinit var blockSizeMenu: PopupMenu
+    private var blockSize: Int = 128
+
     private lateinit var binding: ActivityCryptoBinding
 
     private var algorithm = Crypto.DES
@@ -64,26 +70,45 @@ class CryptoActivity : AppCompatActivity(), View.OnClickListener,
         setKeyFormat(KeyIvFormat.ASCII)
         setIvFormat(KeyIvFormat.ASCII)
         binding.iv.isEnabled = false
-
+        binding.layoutIv.isVisible = false
         charset = Charset.UTF_8
         binding.charset.setText(R.string.utf8)
         encryptedFormat = Charset.BASE64
         binding.encryptedFormat.setText(R.string.base64)
 
-        when (val res = intent.getIntExtra("title", 0)) {
+        val res = intent.getIntExtra("title", 0)
+        when (res) {
             R.string.title_aes -> {
                 algorithm = Crypto.AES
-                title = getString(res)
+                binding.blockSize.setOnClickListener(this)
+                binding.layoutBlockSize.isVisible = true
+                blockSizeMenu = PopupMenu(this, binding.blockSize, Gravity.BOTTOM).apply {
+                    inflate(R.menu.block_size)
+                    setOnMenuItemClickListener {
+                        blockSize = when (it.itemId) {
+                            R.id.bit128 -> 128
+                            R.id.bit192 -> 192
+                            R.id.bit256 -> 256
+                            else -> {
+                                showSnackbar("不支持此编码格式", Toast.LENGTH_SHORT)
+                                return@setOnMenuItemClickListener true
+                            }
+                        }
+                        binding.blockSize.text = it.title
+                        true
+                    }
+                }
             }
             R.string.title_des -> {
                 algorithm = Crypto.DES
-                title = getString(res)
+                binding.layoutBlockSize.isVisible = false
             }
             R.string.title_des_ede -> {
                 algorithm = Crypto.DESede
-                title = getString(res)
+                binding.layoutBlockSize.isVisible = false
             }
         }
+        setTitle(res)
 
         binding.mode.setOnClickListener(this)
         binding.padding.setOnClickListener(this)
@@ -180,6 +205,7 @@ class CryptoActivity : AppCompatActivity(), View.OnClickListener,
             R.id.key_format -> keyFormatMenu.show()
             R.id.charset -> charsetMenu.show()
             R.id.encrypted_format -> encryptedFormatMenu.show()
+            R.id.block_size -> blockSizeMenu.show()
             R.id.encrypt -> encrypt()
             R.id.decrypt -> decrypt()
             R.id.clip -> {
@@ -195,10 +221,12 @@ class CryptoActivity : AppCompatActivity(), View.OnClickListener,
         when (item?.itemId) {
             R.id.ecb -> {
                 binding.mode.text = item.title
-                binding.iv.setText("")
+                binding.layoutIv.isVisible = false
+                binding.iv.text = null
                 binding.iv.isEnabled = false
             }
             R.id.cbc, R.id.cfb, R.id.ofb, R.id.ctr -> {
+                binding.layoutIv.isVisible = true
                 binding.mode.text = item.title
                 binding.iv.isEnabled = true
             }
@@ -299,12 +327,13 @@ class CryptoActivity : AppCompatActivity(), View.OnClickListener,
     }
 
     private fun getSecretKey(): SecretKey {
-        val keyBytes = when (keyFormat) {
+        var keyBytes = when (keyFormat) {
             KeyIvFormat.Hex -> HexUtils.decode(binding.key.text.toString())
             KeyIvFormat.ASCII -> binding.key.text.toString().toByteArray()
         }
         return when (algorithm) {
             Crypto.AES -> {
+                keyBytes = keyBytes.copyOf(blockSize / 8)
                 SecretKeySpec(keyBytes, "RSA")
             }
             Crypto.DES -> {

@@ -16,6 +16,9 @@
 
     <string name="des">DES</string>
     <string name="aes">AES</string>
+    <string name="bit128">128位</string>
+    <string name="bit192">192位</string>
+    <string name="bit256">256位</string>
     <string name="bit512">512位</string>
     <string name="bit1024">1024位</string>
     <string name="bit2048">2048位</string>

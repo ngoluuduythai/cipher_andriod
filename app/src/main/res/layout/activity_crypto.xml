@@ -77,9 +77,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:text="解密" />
+
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_iv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -139,6 +141,31 @@
                 android:layout_height="48dp"
                 android:gravity="center"
                 android:text="@string/hex"
+                app:drawableEndCompat="@drawable/ic_down" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_block_size"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="数据块:"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/block_size"
+                android:layout_width="100dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:gravity="center"
+                android:text="@string/bit128"
                 app:drawableEndCompat="@drawable/ic_down" />
 
         </LinearLayout>
