@@ -1,6 +1,7 @@
 package cn.woolsen.cipher
 
 import cn.woolsen.cipher.util.HexKt.decodeHexToBytes
+import cn.woolsen.cipher.util.HexKt.encodeToHexString
 import cn.woolsen.cipher.util.HexUtils
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.junit.Test
@@ -18,18 +19,18 @@ class AESTest {
 
     @Test
     fun test() {
+        Security.addProvider(BouncyCastleProvider())
+
         val key = "3132333435363738"
         val iv = "hello000hello000"
         val text = "hello world"
+        val bit = 128
 
 
-        val keyBytes = key.decodeHexToBytes().copyOf(24)
+        val keyBytes = key.decodeHexToBytes().copyOf(bit / 8)
+        println("Key[base64]: ${Base64.getEncoder().encodeToString(keyBytes)}")
         println("Key[Hex]: " + HexUtils.encode(keyBytes))
         println("Key Length: ${keyBytes.size}")
-        println("Key Bytes: ${keyBytes.joinToString()}")
-
-
-        Security.addProvider(BouncyCastleProvider())
 
 
         //1.构造密钥生成器，指定为AES算法,不区分大小写
@@ -43,11 +44,16 @@ class AESTest {
         val secretKey = SecretKeySpec(keyBytes, "AES")
 
 
-        val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
+        val cipher = Cipher.getInstance("AES/CTR/PKCS7Padding")
 
         cipher.init(Cipher.ENCRYPT_MODE, secretKey, IvParameterSpec(iv.toByteArray()))
 
-        println(Base64.getEncoder().encodeToString(cipher.doFinal(text.toByteArray())))
+        val encryptedBytes = cipher.doFinal(text.toByteArray())
+
+        println("明文[utf-8]: $text")
+        println("明文[hex]: ${text.toByteArray().encodeToHexString()}")
+        println("密文[base64]: " + Base64.getEncoder().encodeToString(encryptedBytes))
+        println("密文[hex]: ${encryptedBytes.encodeToHexString()}")
     }
 
 }

@@ -21,6 +21,7 @@
         <activity android:name=".ui.RSAGenActivity" />
         <activity android:name=".ui.RSACryptoActivity" />
         <activity android:name=".ui.RSACheckActivity" />
+        <activity android:name=".ui.HashActivity" />
     </application>
 
 </manifest>
