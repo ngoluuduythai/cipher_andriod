@@ -27,7 +27,8 @@ class MainActivity : AppCompatActivity() {
             R.string.title_rsa_private to RSACryptoActivity::class.java,
             R.string.title_rsa_public to RSACryptoActivity::class.java,
             R.string.title_rsa_check to RSACheckActivity::class.java,
-            R.string.title_hash to HashActivity::class.java
+            R.string.title_hash to HashActivity::class.java,
+            R.string.title_hmac to HMacActivity::class.java
         ).entries.toList()
         val adapter = ArrayAdapter(
             this, android.R.layout.simple_list_item_1, list.map { getString(it.key) })

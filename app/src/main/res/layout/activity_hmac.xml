@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    tools:context=".ui.HMacActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="算法:"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/algorithm"
+            android:layout_width="160dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:onClick="onClick"
+            app:drawableEndCompat="@drawable/ic_down"
+            tools:text="@string/md5" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/encrypt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:onClick="onClick"
+            android:text="加密" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="@string/label_key"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/key"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:hint="@string/hint_key" />
+
+        <TextView
+            android:id="@+id/key_format"
+            android:layout_width="72dp"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:text="@string/hex"
+            app:drawableEndCompat="@drawable/ic_down" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="密文类型:"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/encrypted_format"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:text="@string/base64"
+            app:drawableEndCompat="@drawable/ic_down" />
+
+        <TextView
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="字符集:"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/charset"
+            android:layout_width="140dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:onClick="onClick"
+            app:drawableEndCompat="@drawable/ic_down"
+            tools:text="@string/gb2312" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="end"
+        android:labelFor="@id/text"
+        android:text="@string/label_input_1"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/shape_rectangle"
+        android:gravity="start|top"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine"
+        android:minHeight="120dp"
+        android:padding="4dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/label_output_1"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/clip"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
+            android:onClick="onClick"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="@string/copy"
+            android:textColor="@color/purple_200" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/after_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/shape_rectangle"
+        android:gravity="start|top"
+        android:minHeight="120dp"
+        android:padding="4dp"
+        android:textIsSelectable="true" />
+
+</LinearLayout>

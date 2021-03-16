@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/hmac_md5" android:title="@string/hmac_md5" />
+    <item android:id="@+id/hmac_sha1" android:title="@string/hmac_sha1" />
+    <item android:id="@+id/hmac_sha256" android:title="@string/hmac_sha256" />
+    <item android:id="@+id/hmac_sha384" android:title="@string/hmac_sha384" />
+    <item android:id="@+id/hmac_sha512" android:title="@string/hmac_sha512" />
+</menu>

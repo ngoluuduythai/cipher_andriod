@@ -53,13 +53,15 @@
     <string name="label_iv">初始化向量iv:</string>
     <string name="label_key">密钥:</string>
     <string name="label_iv_key_format">iv和密钥编码格式:</string>
-    <string name="label_output">加密、解密转换结果:</string>
-    <string name="label_input">待加密、解密的文本:</string>
     <string name="label_rsa_gen_digit">生成密钥位数:</string>
     <string name="label_private">私钥:</string>
     <string name="label_public">公钥:</string>
     <string name="label_encrypted_type">密文类型:</string>
     <string name="label_charset">字符集:</string>
+    <string name="label_input">待加密、解密的文本:</string>
+    <string name="label_input_1">待加密文本:</string>
+    <string name="label_output">加密、解密转换结果:</string>
+    <string name="label_output_1">加密结果:</string>
 
     <string name="generate">生成</string>
     <string name="copy">复制</string>
@@ -68,6 +70,13 @@
     <string name="md5">MD5</string>
     <string name="sha1">SHA-1</string>
     <string name="sha256">SHA-256</string>
+    <string name="sha384">SHA-384</string>
     <string name="sha512">SHA-512</string>
+    <string name="hmac_md5">HMAC-MD5</string>
+    <string name="hmac_sha1">HMAC-SHA-1</string>
+    <string name="hmac_sha256">HMAC-SHA-256</string>
+    <string name="hmac_sha384">HMAC-SHA-384</string>
+    <string name="hmac_sha512">HMAC-SHA-512</string>
     <string name="title_hmac">HMac计算</string>
+    <string name="hint_key">请输入密钥</string>
 </resources>
