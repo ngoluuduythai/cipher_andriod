@@ -77,7 +77,7 @@
         android:layout_marginTop="8dp"
         android:gravity="end"
         android:labelFor="@id/text"
-        android:text="@string/label_input"
+        android:text="@string/label_input_1"
         android:textStyle="bold" />
 
     <EditText
