@@ -40,7 +40,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="end"
-            android:text="密文类型:"
+            android:text="Ciphertext type:"
             android:textStyle="bold" />
 
         <TextView
@@ -58,7 +58,7 @@
             android:layout_width="48dp"
             android:layout_height="wrap_content"
             android:gravity="end"
-            android:text="字符集:"
+            android:text="Character set:"
             android:textStyle="bold" />
 
         <TextView

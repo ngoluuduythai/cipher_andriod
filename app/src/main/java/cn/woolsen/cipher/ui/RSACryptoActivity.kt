@@ -207,10 +207,10 @@ class RSACryptoActivity : AppCompatActivity(), View.OnClickListener {
                 String(decryptedBytes, charset(charset))
             }
             binding.afterText.text = afterText
-            showSnackbar("解密成功", Snackbar.LENGTH_SHORT)
+            showSnackbar("Decrypt", Snackbar.LENGTH_SHORT)
         } catch (e: Exception) {
             e.printStackTrace()
-            showSnackbar(e.message ?: "解密出错", Snackbar.LENGTH_SHORT)
+            showSnackbar(e.message ?: "Decrypt", Snackbar.LENGTH_SHORT)
         }
     }
 

@@ -16,13 +16,13 @@
 
     <string name="des">DES</string>
     <string name="aes">AES</string>
-    <string name="bit128">128位</string>
-    <string name="bit192">192位</string>
-    <string name="bit256">256位</string>
-    <string name="bit512">512位</string>
-    <string name="bit1024">1024位</string>
-    <string name="bit2048">2048位</string>
-    <string name="bit4096">4096位</string>
+    <string name="bit128">128 bit</string>
+    <string name="bit192">192 bits</string>
+    <string name="bit256">256 bits</string>
+    <string name="bit512">512 bits</string>
+    <string name="bit1024">1024 bit</string>
+    <string name="bit2048">2048 bits</string>
+    <string name="bit4096">4096 bits</string>
 
     <string name="hex">Hex</string>
     <string name="base64">Base64</string>
@@ -35,38 +35,38 @@
     <string name="utf16be">UTF-16BE</string>
     <string name="utf16le">UTF-16LE</string>
 
-    <string name="title_aes">AES加密解密</string>
-    <string name="title_des">DES加密解密</string>
-    <string name="title_des_ede">3DES加密解密</string>
-    <string name="title_rsa_gen">RSA密钥对生成</string>
-    <string name="title_rsa_private">RSA私钥加密解密</string>
-    <string name="title_rsa_public">RSA公钥加密解密</string>
-    <string name="title_rsa_check">RSA公私密钥校验</string>
+    <string name="title_aes">AES encryption and decryption</string>
+    <string name="title_des">DES encryption and decryption</string>
+    <string name="title_des_ede">3DES encryption and decryption</string>
+    <string name="title_rsa_gen"> RSA key pair generation</string>
+    <string name="title_rsa_private">RSA private key encryption and decryption</string>
+    <string name="title_rsa_public">RSA public key encryption and decryption</string>
+    <string name="title_rsa_check">RSA public and private key verification</string>
 
-    <string name="private_key">私钥</string>
-    <string name="rsa_private_encrypt">RSA私钥加密</string>
-    <string name="rsa_private_decrypt">RSA私钥解密[解密对应公钥的加密]</string>
-    <string name="public_key">公钥</string>
-    <string name="rsa_public_encrypt">RSA公钥加密</string>
-    <string name="rsa_public_decrypt">RSA公钥解密[解密对应私钥的加密]</string>
+    <string name="private_key"> private key</string>
+    <string name="rsa_private_encrypt"> RSA private key encryption </string>
+    <string name="rsa_private_decrypt"> RSA private key decryption [decrypt the encryption corresponding to the public key]</string>
+    <string name="public_key"> public key</string>
+    <string name="rsa_public_encrypt"> RSA public key encryption </string>
+    <string name="rsa_public_decrypt"> RSA public key decryption [decrypt the encryption corresponding to the private key]</string>
 
-    <string name="label_iv">初始化向量iv:</string>
-    <string name="label_key">密钥:</string>
-    <string name="label_iv_key_format">iv和密钥编码格式:</string>
-    <string name="label_rsa_gen_digit">生成密钥位数:</string>
-    <string name="label_private">私钥:</string>
-    <string name="label_public">公钥:</string>
-    <string name="label_encrypted_type">密文类型:</string>
-    <string name="label_charset">字符集:</string>
-    <string name="label_input">待加密、解密的文本:</string>
-    <string name="label_input_1">待加密文本:</string>
-    <string name="label_output">加密、解密转换结果:</string>
-    <string name="label_output_1">加密结果:</string>
+    <string name="label_iv"> Initialization vector iv:</string>
+    <string name="label_key">Key:</string>
+    <string name="label_iv_key_format"> iv and key encoding format:</string>
+    <string name="label_rsa_gen_digit"> Generate key digits:</string>
+    <string name="label_private"> private key:</string>
+    <string name="label_public"> Public key:</string>
+    <string name="label_encrypted_type"> ciphertext type:</string>
+    <string name="label_charset"> character set:</string>
+    <string name="label_input"> the text to be encrypted and decrypted:</string>
+    <string name="label_input_1"> to be encrypted text:</string>
+    <string name="label_output"> Encryption and decryption conversion results:</string>
+    <string name="label_output_1"> encryption result:</string>
 
-    <string name="generate">生成</string>
-    <string name="copy">复制</string>
-    <string name="check">检查</string>
-    <string name="title_hash">Hash加密</string>
+    <string name="generate"> generate</string>
+    <string name="copy"> copy</string>
+    <string name="check"> check</string>
+    <string name="title_hash">Hash encryption</string>
     <string name="md5">MD5</string>
     <string name="sha1">SHA-1</string>
     <string name="sha256">SHA-256</string>
@@ -77,6 +77,6 @@
     <string name="hmac_sha256">HMAC-SHA-256</string>
     <string name="hmac_sha384">HMAC-SHA-384</string>
     <string name="hmac_sha512">HMAC-SHA-512</string>
-    <string name="title_hmac">HMac计算</string>
-    <string name="hint_key">请输入密钥</string>
+    <string name="title_hmac"> HMac calculation</string>
+    <string name="hint_key"> please enter the key</string>
 </resources>

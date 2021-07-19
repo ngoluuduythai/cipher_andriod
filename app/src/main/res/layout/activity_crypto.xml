@@ -24,7 +24,7 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="模式:"
+                android:text="Mode:"
                 android:textStyle="bold" />
 
             <TextView
@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:text="加密" />
+                android:text="Encryption" />
 
         </LinearLayout>
 
@@ -57,7 +57,7 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="填充:"
+                android:text="filling:"
                 android:textStyle="bold" />
 
             <TextView
@@ -76,7 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:text="解密" />
+                android:text="Decrypt" />
 
         </LinearLayout>
 

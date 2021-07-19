@@ -96,13 +96,13 @@ class RSACheckActivity : AppCompatActivity(), View.OnClickListener {
                 keyFactory.generatePublic(keySpec).encoded
             }
             if (publicKeyByPrivate.contentEquals(publicKey)) {
-                showSnackbar("恭喜你，公私钥匹配的！", Snackbar.LENGTH_SHORT)
+                showSnackbar("Congratulations, the public and private keys match!", Snackbar.LENGTH_SHORT)
             } else {
-                showSnackbar("公私钥不匹配！", Snackbar.LENGTH_SHORT)
+                showSnackbar("Public and private keys do not match!", Snackbar.LENGTH_SHORT)
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            showSnackbar(e.message ?: "检查出错", Snackbar.LENGTH_SHORT)
+            showSnackbar(e.message ?: "Check error", Snackbar.LENGTH_SHORT)
         }
     }
 

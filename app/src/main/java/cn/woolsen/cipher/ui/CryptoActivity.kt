@@ -270,7 +270,7 @@ class CryptoActivity : AppCompatActivity(), View.OnClickListener,
                 Charset.BASE64 -> binding.text.text.toString().base64DecodeToBytes()
                 Charset.HEX -> HexUtils.decode(binding.text.text.toString())
                 else -> {
-                    showSnackbar("不支持此编码", Snackbar.LENGTH_SHORT)
+                    showSnackbar("This encoding is not supported", Snackbar.LENGTH_SHORT)
                     return
                 }
             }
@@ -283,10 +283,10 @@ class CryptoActivity : AppCompatActivity(), View.OnClickListener,
                 String(decryptedBytes, charset(charset))
             }
             binding.afterText.text = afterText
-            showSnackbar("解密成功", Toast.LENGTH_SHORT)
+            showSnackbar("Successfully decrypted", Toast.LENGTH_SHORT)
         } catch (e: Exception) {
             e.printStackTrace()
-            showSnackbar(e.message ?: "解密出错", Snackbar.LENGTH_SHORT)
+            showSnackbar(e.message ?: "Decryption error", Snackbar.LENGTH_SHORT)
         }
     }
 

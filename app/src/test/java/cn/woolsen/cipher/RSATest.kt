@@ -120,7 +120,7 @@ class RSATest {
             println("私钥加密：${base64EncryptedByPrivateKey}")
             cipher.init(Cipher.DECRYPT_MODE, publicKey)
             val decryptedByPublicKey = cipher.doFinal(encryptedByPrivateKey)
-            println("公钥解密：${decryptedByPublicKey.decodeToString()}")
+            println("Decrypt：${decryptedByPublicKey.decodeToString()}")
             Assert.assertEquals(text, decryptedByPublicKey.decodeToString())
         } catch (e: Exception) {
             e.printStackTrace()
